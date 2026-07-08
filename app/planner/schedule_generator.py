@@ -2,6 +2,7 @@ from fastapi import HTTPException
 
 from app.schemas.farm_plan import FarmPlanRequest
 from app.planner.crop_rules import CROP_RULES
+from app.planner.resource_allocator import generate_resource_report
 
 
 def generate_schedule(request: FarmPlanRequest):
@@ -22,13 +23,20 @@ def generate_schedule(request: FarmPlanRequest):
 
         activities.append(
             {
-                "activity": activity["name"],
-                "date": activity_date
+            **activity,
+            "date": activity_date
             }
         )
 
+    schedule = {
+    "crop": request.crop,
+    "planting_date": request.planting_date,
+    "activities": activities
+    }
+    
+    resource_report = generate_resource_report(schedule)
+    
     return {
-        "crop": request.crop,
-        "planting_date": request.planting_date,
-        "activities": activities
+    **schedule,
+    "resource_report": resource_report
     }
