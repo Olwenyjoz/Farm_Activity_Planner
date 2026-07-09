@@ -1,8 +1,10 @@
 from fastapi import HTTPException
 
 from app.schemas.farm_plan import FarmPlanRequest
+
 from app.planner.crop_rules import CROP_RULES
 from app.planner.resource_allocator import generate_resource_report
+from app.planner.conflict_detector import detect_worker_conflicts
 
 
 def generate_schedule(request: FarmPlanRequest):
@@ -36,7 +38,13 @@ def generate_schedule(request: FarmPlanRequest):
     
     resource_report = generate_resource_report(schedule)
     
+    conflicts = detect_worker_conflicts(
+    schedule,
+    request.workers
+    )
+    
     return {
     **schedule,
-    "resource_report": resource_report
+    "resource_report": resource_report,
+    "conflicts": conflicts
     }
