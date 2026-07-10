@@ -5,6 +5,7 @@ from app.schemas.farm_plan import FarmPlanRequest
 from app.planner.crop_rules import CROP_RULES
 from app.planner.resource_allocator import generate_resource_report
 from app.planner.conflict_detector import detect_worker_conflicts
+from app.planner.decision_engine import generate_recommendations
 
 
 def generate_schedule(request: FarmPlanRequest):
@@ -25,26 +26,33 @@ def generate_schedule(request: FarmPlanRequest):
 
         activities.append(
             {
-            **activity,
-            "date": activity_date
+                **activity,
+                "date": activity_date
             }
         )
 
     schedule = {
-    "crop": request.crop,
-    "planting_date": request.planting_date,
-    "activities": activities
+        "crop": request.crop,
+        "planting_date": request.planting_date,
+        "activities": activities
     }
-    
+
     resource_report = generate_resource_report(schedule)
-    
+
     conflicts = detect_worker_conflicts(
-    schedule,
-    request.workers
+        schedule,
+        request.workers
     )
-    
+
+    recommendations = generate_recommendations(
+        schedule,
+        resource_report,
+        conflicts
+    )
+
     return {
-    **schedule,
-    "resource_report": resource_report,
-    "conflicts": conflicts
+        **schedule,
+        "resource_report": resource_report,
+        "conflicts": conflicts,
+        "recommendations": recommendations
     }

@@ -1,26 +1,45 @@
 def detect_worker_conflicts(schedule, available_workers):
+    """
+    Detects worker conflicts by comparing the number of workers
+    required for each day's activities with the number of workers
+    available on the farm.
+    """
 
-    daily_workers = {}
+    daily_schedule = {}
 
     conflicts = []
 
+    # Group activities by date
     for activity in schedule["activities"]:
 
         date = activity["date"]
 
-        workers = activity["workers_required"]
+        if date not in daily_schedule:
+            daily_schedule[date] = {
+                "workers": 0,
+                "activities": []
+            }
 
-        daily_workers[date] = daily_workers.get(date, 0) + workers
+        daily_schedule[date]["workers"] += activity["workers_required"]
 
-    for date, workers in daily_workers.items():
+        daily_schedule[date]["activities"].append(
+            activity["name"]
+        )
 
-        if workers > available_workers:
+    # Detect conflicts
+    for date, details in daily_schedule.items():
+
+        if details["workers"] > available_workers:
 
             conflicts.append(
                 {
                     "date": date,
-                    "workers_needed": workers,
-                    "workers_available": available_workers
+                    "activities": details["activities"],
+                    "workers_needed": details["workers"],
+                    "workers_available": available_workers,
+                    "worker_shortage": (
+                        details["workers"] - available_workers
+                    )
                 }
             )
 

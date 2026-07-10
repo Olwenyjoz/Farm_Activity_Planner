@@ -21,8 +21,20 @@ class ResourceReportResponse(BaseModel):
 
 class ConflictResponse(BaseModel):
     date: date
+    activities: list[str]
     workers_needed: int
     workers_available: int
+    worker_shortage: int
+
+
+class RecommendationResponse(BaseModel):
+    title: str
+    category: str
+    severity: str
+    activity: str
+    date: date
+    reason: str
+    suggested_action: str
 
 
 class FarmPlanResponse(BaseModel):
@@ -31,3 +43,4 @@ class FarmPlanResponse(BaseModel):
     activities: list[ActivityResponse]
     resource_report: ResourceReportResponse
     conflicts: list[ConflictResponse]
+    recommendations: list[RecommendationResponse]
