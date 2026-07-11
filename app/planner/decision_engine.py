@@ -1,3 +1,32 @@
+"""
+=========================================================
+Module: decision_engine.py
+
+Purpose:
+    Generates intelligent recommendations for the
+    Farm Activity Planner AI.
+
+Responsibilities:
+    - Analyze worker conflicts
+    - Analyze weather-sensitive activities
+    - Analyze priority activities
+    - Produce structured recommendations
+
+Author:
+    Deogracia Olweny
+=========================================================
+"""
+
+from app.core.enums import (
+    RecommendationSeverity,
+    RecommendationCategory,
+)
+
+from app.core.constants import WORKFORCE_WARNING_THRESHOLD
+
+from app.utils.text_utils import format_activity_list
+
+
 def generate_recommendations(schedule, resource_report, conflicts):
     """
     Generates intelligent recommendations based on:
@@ -14,13 +43,13 @@ def generate_recommendations(schedule, resource_report, conflicts):
     # --------------------------------------------------------
     for conflict in conflicts:
 
-        activity_names = ", ".join(conflict["activities"])
+        activity_names = format_activity_list(conflict["activities"])
 
         recommendations.append(
             {
                 "title": "Worker Shortage",
-                "category": "Workers",
-                "severity": "High",
+                "category": RecommendationCategory.WORKERS.value,
+                "severity": RecommendationSeverity.HIGH.value,
                 "activity": activity_names,
                 "date": conflict["date"],
                 "reason": (
@@ -38,13 +67,14 @@ def generate_recommendations(schedule, resource_report, conflicts):
     # --------------------------------------------------------
     # Rule 2: Large Workforce Requirement
     # --------------------------------------------------------
-    if resource_report["total_workers_required"] > 20:
+    if (
+    resource_report["total_workers_required"] > WORKFORCE_WARNING_THRESHOLD):
 
         recommendations.append(
             {
                 "title": "Large Workforce Required",
-                "category": "Workers",
-                "severity": "Medium",
+                "category": RecommendationCategory.WORKERS.value,
+                "severity": RecommendationSeverity.MEDIUM.value,
                 "activity": "Farm Plan",
                 "date": schedule["planting_date"],
                 "reason": (
@@ -68,8 +98,8 @@ def generate_recommendations(schedule, resource_report, conflicts):
             recommendations.append(
                 {
                     "title": "Weather Monitoring",
-                    "category": "Weather",
-                    "severity": "Medium",
+                    "category": RecommendationCategory.WEATHER.value,
+                    "severity": RecommendationSeverity.MEDIUM.value,
                     "activity": activity["name"],
                     "date": activity["date"],
                     "reason": (
@@ -87,8 +117,8 @@ def generate_recommendations(schedule, resource_report, conflicts):
             recommendations.append(
                 {
                     "title": "High Priority Activity",
-                    "category": "Priority",
-                    "severity": "High",
+                    "category": RecommendationCategory.PRIORITY.value,
+                    "severity": RecommendationSeverity.HIGH.value,
                     "activity": activity["name"],
                     "date": activity["date"],
                     "reason": (
