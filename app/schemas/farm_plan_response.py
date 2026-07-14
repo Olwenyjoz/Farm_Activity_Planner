@@ -1,6 +1,8 @@
 from datetime import date
 from pydantic import BaseModel
 
+from app.schemas.calendar_event import CalendarEvent
+
 
 class ActivityResponse(BaseModel):
     name: str
@@ -44,3 +46,4 @@ class FarmPlanResponse(BaseModel):
     resource_report: ResourceReportResponse
     conflicts: list[ConflictResponse]
     recommendations: list[RecommendationResponse]
+    calendar: list[CalendarEvent]
