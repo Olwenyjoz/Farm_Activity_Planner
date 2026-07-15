@@ -30,7 +30,8 @@ from app.planner.crop_rules import CROP_RULES
 from app.planner.resource_allocator import generate_resource_report
 from app.planner.conflict_detector import detect_worker_conflicts
 from app.planner.decision_engine import generate_recommendations
-from app.planner.calendar.generator import generate_calendar
+from app.planner.calendar.service import build_calendar
+from app.planner.optimizer.service import optimize_schedule
 
 from app.core.logger import logger
 from app.exceptions.farm_exceptions import CropNotSupportedError
@@ -134,13 +135,18 @@ def generate_schedule(request: FarmPlanRequest):
     )
     
     # =====================================================
+    # Optimize Schedule
+    # =====================================================
+    schedule = optimize_schedule(schedule)
+    
+    # =====================================================
     # Generate Calendar Events
     # =====================================================
     logger.info(
     "Generating calendar events."
     )
 
-    calendar = generate_calendar(schedule)
+    calendar = build_calendar(schedule)
 
     # =====================================================
     # Schedule Generation Completed

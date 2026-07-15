@@ -8,6 +8,7 @@ Purpose:
 
 Responsibilities:
     - Analyze worker conflicts
+    - Analyze workforce requirements
     - Analyze weather-sensitive activities
     - Analyze priority activities
     - Produce structured recommendations
@@ -23,27 +24,45 @@ from app.core.enums import (
 )
 
 from app.core.constants import WORKFORCE_WARNING_THRESHOLD
-
 from app.utils.text_utils import format_activity_list
+from app.planner.weather.service import get_weather_forecast
 
 
-def generate_recommendations(schedule, resource_report, conflicts):
+def generate_recommendations(
+    schedule,
+    resource_report,
+    conflicts,
+):
     """
-    Generates intelligent recommendations based on:
-    1. Worker conflicts
-    2. Resource requirements
-    3. Activity priority
-    4. Weather-sensitive activities
+    Generate intelligent recommendations for the farm plan.
+
+    Parameters
+    ----------
+    schedule : dict
+        Generated farm schedule.
+
+    resource_report : dict
+        Resource allocation report.
+
+    conflicts : list
+        Worker conflicts detected.
+
+    Returns
+    -------
+    list
+        List of recommendation dictionaries.
     """
 
     recommendations = []
 
-    # --------------------------------------------------------
+    # =====================================================
     # Rule 1: Worker Shortage
-    # --------------------------------------------------------
+    # =====================================================
     for conflict in conflicts:
 
-        activity_names = format_activity_list(conflict["activities"])
+        activity_names = format_activity_list(
+            conflict["activities"]
+        )
 
         recommendations.append(
             {
@@ -58,17 +77,19 @@ def generate_recommendations(schedule, resource_report, conflicts):
                     f"but only {conflict['workers_available']} are available."
                 ),
                 "suggested_action": (
-                    f"Hire {conflict['worker_shortage']} additional worker(s) "
-                    f"or reschedule the affected activities."
+                    f"Hire {conflict['worker_shortage']} additional "
+                    f"worker(s) or reschedule the affected activities."
                 ),
             }
         )
 
-    # --------------------------------------------------------
+    # =====================================================
     # Rule 2: Large Workforce Requirement
-    # --------------------------------------------------------
+    # =====================================================
     if (
-    resource_report["total_workers_required"] > WORKFORCE_WARNING_THRESHOLD):
+        resource_report["total_workers_required"]
+        > WORKFORCE_WARNING_THRESHOLD
+    ):
 
         recommendations.append(
             {
@@ -79,39 +100,95 @@ def generate_recommendations(schedule, resource_report, conflicts):
                 "date": schedule["planting_date"],
                 "reason": (
                     f"The farm plan requires "
-                    f"{resource_report['total_workers_required']} worker assignments."
+                    f"{resource_report['total_workers_required']} "
+                    f"worker assignments."
                 ),
                 "suggested_action": (
-                    "Prepare sufficient labor before activities begin."
+                    "Prepare sufficient labour before activities begin."
                 ),
             }
         )
 
-    # --------------------------------------------------------
-    # Rule 3 & Rule 4
-    # --------------------------------------------------------
+    # =====================================================
+    # Rule 3 & Rule 4:
+    # Weather + Priority
+    # =====================================================
     for activity in schedule.get("activities", []):
 
-    # Rule 3: Weather-sensitive activity
+        # ---------------------------------------------
+        # Rule 3: Weather-Sensitive Activities
+        # ---------------------------------------------
         if activity["weather_sensitive"]:
 
-            recommendations.append(
-                {
-                    "title": "Weather Monitoring",
-                    "category": RecommendationCategory.WEATHER.value,
-                    "severity": RecommendationSeverity.MEDIUM.value,
-                    "activity": activity["name"],
-                    "date": activity["date"],
-                    "reason": (
-                        f"{activity['name']} is weather-sensitive and may be affected by rainfall or strong winds."
-                    ),
-                    "suggested_action": (
-                        "Review the weather forecast 24 hours before the scheduled activity and postpone if conditions are unsuitable."
-                    ),
-                }
+            forecast = get_weather_forecast(
+                activity["date"]
             )
 
-    # Rule 4: High-priority activity
+            # Heavy Rain
+            if forecast.rainfall_mm >= 10:
+
+                recommendations.append(
+                    {
+                        "title": "Heavy Rain Forecast",
+                        "category": RecommendationCategory.WEATHER.value,
+                        "severity": RecommendationSeverity.HIGH.value,
+                        "activity": activity["name"],
+                        "date": activity["date"],
+                        "reason": (
+                            f"{forecast.rainfall_mm} mm of rainfall "
+                            f"is forecast."
+                        ),
+                        "suggested_action": (
+                            "Postpone this activity until rainfall decreases."
+                        ),
+                    }
+                )
+
+            # Strong Wind
+            elif forecast.wind_speed >= 15:
+
+                recommendations.append(
+                    {
+                        "title": "Strong Wind Forecast",
+                        "category": RecommendationCategory.WEATHER.value,
+                        "severity": RecommendationSeverity.MEDIUM.value,
+                        "activity": activity["name"],
+                        "date": activity["date"],
+                        "reason": (
+                            f"Strong winds of "
+                            f"{forecast.wind_speed} km/h "
+                            f"are forecast."
+                        ),
+                        "suggested_action": (
+                            "Avoid spraying during strong winds."
+                        ),
+                    }
+                )
+
+            # Suitable Weather
+            else:
+
+                recommendations.append(
+                    {
+                        "title": "Suitable Weather",
+                        "category": RecommendationCategory.WEATHER.value,
+                        "severity": RecommendationSeverity.LOW.value,
+                        "activity": activity["name"],
+                        "date": activity["date"],
+                        "reason": (
+                            f"{forecast.condition} weather "
+                            f"is expected."
+                        ),
+                        "suggested_action": (
+                            "Weather conditions are suitable "
+                            "for the activity."
+                        ),
+                    }
+                )
+
+        # ---------------------------------------------
+        # Rule 4: High Priority Activity
+        # ---------------------------------------------
         if activity["priority"] == "High":
 
             recommendations.append(
@@ -122,12 +199,15 @@ def generate_recommendations(schedule, resource_report, conflicts):
                     "activity": activity["name"],
                     "date": activity["date"],
                     "reason": (
-                        f"{activity['name']} is a high-priority activity that should not be delayed."
+                        f"{activity['name']} is a high-priority "
+                        "activity that should not be delayed."
                     ),
                     "suggested_action": (
-                        "Prepare workers, equipment, transport, and required materials before the scheduled date."
+                        "Prepare workers, equipment, transport "
+                        "and required materials before the "
+                        "scheduled date."
                     ),
                 }
             )
-            
+
     return recommendations
