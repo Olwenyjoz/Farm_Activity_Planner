@@ -7,3 +7,5 @@ class FarmPlanRequest(BaseModel):
     planting_date: date
     farm_size: float
     workers: int
+
+

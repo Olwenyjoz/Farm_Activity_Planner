@@ -12,6 +12,8 @@ Responsibilities:
     - Generate resource requirements
     - Detect worker conflicts
     - Generate intelligent recommendations
+    - Optimize the schedule
+    - Generate calendar events
     - Return the complete farm plan
 
 Author:
@@ -22,9 +24,7 @@ Project:
 =========================================================
 """
 
-from fastapi import HTTPException
-
-from app.schemas.farm_plan import FarmPlanRequest
+from app.schemas.farm_plan_create import FarmPlanCreate
 
 from app.planner.crop_rules import CROP_RULES
 from app.planner.resource_allocator import generate_resource_report
@@ -37,30 +37,9 @@ from app.core.logger import logger
 from app.exceptions.farm_exceptions import CropNotSupportedError
 
 
-def generate_schedule(request: FarmPlanRequest):
+def generate_schedule(request: FarmPlanCreate):
     """
     Generate a complete farm activity schedule.
-
-    Parameters
-    ----------
-    request : FarmPlanRequest
-        The validated farm planning request received
-        from the API.
-
-    Returns
-    -------
-    dict
-        A complete farm plan containing:
-        - Crop information
-        - Scheduled activities
-        - Resource report
-        - Worker conflicts
-        - Recommendations
-
-    Raises
-    ------
-    HTTPException
-        If the requested crop is not supported.
     """
 
     # =====================================================
@@ -90,16 +69,21 @@ def generate_schedule(request: FarmPlanRequest):
 
     for activity in rules["activities"]:
 
-        # Calculate the activity date by adding the
-        # configured offset to the planting date.
         activity_date = (
             request.planting_date + activity["offset"]
         )
 
         activities.append(
             {
-                **activity,
-                "date": activity_date
+                "name": activity["name"],
+                "date": activity_date,
+                "priority": activity["priority"],
+                "duration_hours": activity["duration_hours"],
+                "workers_required": activity["workers_required"],
+                "equipment": activity["equipment"],
+                "description": activity["description"],
+                "status": activity["status"],
+                "weather_sensitive": activity["weather_sensitive"],
             }
         )
 
@@ -133,17 +117,17 @@ def generate_schedule(request: FarmPlanRequest):
         resource_report,
         conflicts
     )
-    
+
     # =====================================================
     # Optimize Schedule
     # =====================================================
     schedule = optimize_schedule(schedule)
-    
+
     # =====================================================
     # Generate Calendar Events
     # =====================================================
     logger.info(
-    "Generating calendar events."
+        "Generating calendar events."
     )
 
     calendar = build_calendar(schedule)
@@ -154,18 +138,18 @@ def generate_schedule(request: FarmPlanRequest):
     logger.info(
         "Farm schedule generated successfully."
     )
-    
+
     logger.info(
-    f"Generated {len(calendar)} calendar event(s)."
+        f"Generated {len(calendar)} calendar event(s)."
     )
-    
+
     # =====================================================
     # Return Complete Farm Plan
     # =====================================================
     return {
-    **schedule,
-    "resource_report": resource_report,
-    "conflicts": conflicts,
-    "recommendations": recommendations,
-    "calendar": calendar,
+        **schedule,
+        "resource_report": resource_report,
+        "conflicts": conflicts,
+        "recommendations": recommendations,
+        "calendar": calendar,
     }

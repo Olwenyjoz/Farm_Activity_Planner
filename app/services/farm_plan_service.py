@@ -12,6 +12,10 @@ Responsibilities:
     - Retrieve farm plans
     - Update farm plans
     - Delete farm plans
+    - Pagination
+    - Search
+    - Filtering
+    - Statistics
 
 Author:
     Deogracia Olweny
@@ -27,6 +31,9 @@ from app.database.models import FarmPlanModel
 from app.planner.schedule_generator import generate_schedule
 from app.repositories.farm_plan_repository import FarmPlanRepository
 
+from app.schemas.farm_plan_create import FarmPlanCreate
+from app.schemas.farm_plan_update import FarmPlanUpdate
+
 
 class FarmPlanService:
     """
@@ -37,19 +44,17 @@ class FarmPlanService:
     def __init__(self, repository: FarmPlanRepository):
         """
         Initialize the service with a repository instance.
-
-        Parameters
-        ----------
-        repository : FarmPlanRepository
-            Repository responsible for database operations.
         """
         self.repository = repository
 
+    # =====================================================
+    # SERIALIZATION
+    # =====================================================
 
-    #Serialization of date
     def _serialize_for_database(self, data):
         """
-        Recursively convert Python objects into JSON-serializable values.
+        Recursively convert Python objects into
+        JSON-serializable values.
         """
 
         if isinstance(data, dict):
@@ -58,53 +63,42 @@ class FarmPlanService:
                 for key, value in data.items()
             }
 
-        elif isinstance(data, list):
+        if isinstance(data, list):
             return [
                 self._serialize_for_database(item)
                 for item in data
             ]
 
-        elif isinstance(data, date):
+        if isinstance(data, date):
             return data.isoformat()
 
-        elif isinstance(data, timedelta):
+        if isinstance(data, timedelta):
             return data.days
 
         return data
-        
+
     # =====================================================
     # GENERATE FARM PLAN
     # =====================================================
 
-    def generate_plan(self, request):
+    def generate_plan(
+        self,
+        request: FarmPlanCreate
+    ):
         """
         Generate a farm plan, save it to the database,
-        then return the generated response.
-
-        Parameters
-        ----------
-        request : FarmPlanRequest
-            The validated farm planning request.
-
-        Returns
-        -------
-        dict
-            The generated farm plan.
+        and return the saved farm plan.
         """
 
-        # Generate the farm schedule
         result = generate_schedule(request)
-        
-        print(hasattr(self, "_serialize_for_database"))
-        print(dir(self))
-    
+
         db_result = self._serialize_for_database(result)
 
-        # Convert the generated dictionary into
-        # a SQLAlchemy model for database storage.
         model = FarmPlanModel(
             crop=db_result["crop"],
-            planting_date=date.fromisoformat(db_result["planting_date"]),
+            planting_date=date.fromisoformat(
+                db_result["planting_date"]
+            ),
             activities=db_result["activities"],
             resource_report=db_result["resource_report"],
             conflicts=db_result["conflicts"],
@@ -112,17 +106,16 @@ class FarmPlanService:
             calendar=db_result["calendar"]
         )
 
-        # Save the farm plan
-        self.repository.create(model)
-
-        # Return the generated plan
-        return result
+        return self.repository.create(model)
 
     # =====================================================
     # CREATE
     # =====================================================
 
-    def save_plan(self, plan: FarmPlanModel):
+    def save_plan(
+        self,
+        plan: FarmPlanModel
+    ):
         """
         Save a farm plan directly to the database.
         """
@@ -139,31 +132,120 @@ class FarmPlanService:
         return self.repository.get_all()
 
     # =====================================================
+    # PAGINATED READ
+    # =====================================================
+
+    def get_paginated_plans(
+        self,
+        page: int,
+        size: int
+    ):
+        """
+        Retrieve paginated farm plans.
+        """
+
+        skip = (page - 1) * size
+
+        plans = self.repository.get_paginated(
+            skip=skip,
+            limit=size
+        )
+
+        total = self.repository.count()
+
+        return {
+            "page": page,
+            "size": size,
+            "total": total,
+            "data": plans
+        }
+
+    # =====================================================
     # READ ONE
     # =====================================================
 
-    def get_plan(self, plan_id: int):
+    def get_plan_by_id(
+        self,
+        plan_id: int
+    ):
         """
         Retrieve a farm plan by its ID.
         """
         return self.repository.get_by_id(plan_id)
 
     # =====================================================
+    # SEARCH
+    # =====================================================
+
+    def search_plans_by_crop(
+        self,
+        crop: str
+    ):
+        """
+        Search farm plans by crop.
+        """
+        return self.repository.search_by_crop(crop)
+
+    # =====================================================
+    # FILTER
+    # =====================================================
+
+    def filter_plans_by_planting_date(
+        self,
+        planting_date: date
+    ):
+        """
+        Filter farm plans by planting date.
+        """
+        return self.repository.filter_by_planting_date(
+            planting_date
+        )
+
+    # =====================================================
     # UPDATE
     # =====================================================
 
-    def update_plan(self, plan: FarmPlanModel):
+    def update_plan(
+        self,
+        plan_id: int,
+        request: FarmPlanUpdate
+    ):
         """
         Update an existing farm plan.
         """
-        return self.repository.update(plan)
+
+        updated_data = self._serialize_for_database(
+            request.model_dump()
+        )
+
+        updated_data["planting_date"] = date.fromisoformat(
+            updated_data["planting_date"]
+        )
+
+        return self.repository.update(
+            plan_id,
+            updated_data
+        )
 
     # =====================================================
     # DELETE
     # =====================================================
 
-    def delete_plan(self, plan: FarmPlanModel):
+    def delete_plan(
+        self,
+        plan: FarmPlanModel
+    ):
         """
         Delete a farm plan.
         """
-        self.repository.delete(plan)
+        return self.repository.delete(plan)
+
+    # =====================================================
+    # STATISTICS
+    # =====================================================
+
+    def get_statistics(self):
+        """
+        Retrieve farm plan statistics.
+        """
+        return self.repository.get_statistics()
