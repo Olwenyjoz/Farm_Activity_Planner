@@ -12,11 +12,6 @@ Responsibilities:
     - Prepare for future integrations
       (ICS, Google Calendar, Outlook)
 
-Author:
-    Deogracia Olweny
-
-Project:
-    Farm Activity Planner AI
 =========================================================
 """
 

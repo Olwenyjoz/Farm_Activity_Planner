@@ -5,11 +5,7 @@ Module: farm_plan_create.py
 Purpose:
     Request schema for creating a farm plan.
 
-Author:
-    Deogracia Olweny
 
-Project:
-    Farm Activity Planner AI
 =========================================================
 """
 
@@ -27,3 +23,9 @@ class FarmPlanCreate(BaseModel):
     planting_date: date
     farm_size: float
     workers: int
+    
+    latitude: float
+    longitude: float
+    
+    soil_type: str
+    season: str

@@ -11,11 +11,6 @@ Responsibilities:
     - Perform reusable date conversions
     - Keep date logic centralized
 
-Author:
-    Deogracia Olweny
-
-Project:
-    Farm Activity Planner AI
 =========================================================
 """
 

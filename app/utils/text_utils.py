@@ -10,11 +10,6 @@ Responsibilities:
     - Standardize text output
     - Improve readability
 
-Author:
-    Deogracia Olweny
-
-Project:
-    Farm Activity Planner AI
 =========================================================
 """
 

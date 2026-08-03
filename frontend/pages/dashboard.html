@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+
+        Dashboard
+
+    </title>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet"
+    >
+
+    <link
+        rel="stylesheet"
+        href="../css/style.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="../css/dashboard.css"
+    >
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- ======================================
+         Sidebar
+    ======================================= -->
+
+    <aside class="sidebar">
+
+        <h2>
+
+            🌱 Farm Planner
+
+        </h2>
+
+        <ul>
+
+            <li class="active">
+
+                <a href="dashboard.html">
+
+                    Dashboard
+
+                </a>
+
+            </li>
+
+            <li>
+
+                <a href="planner.html">
+
+                    Generate Plan
+
+                </a>
+
+            </li>
+
+            <li>
+
+                <a href="calendar.html">
+
+                    Calendar
+
+                </a>
+
+            </li>
+
+            <li>
+
+                <a href="resources.html">
+
+                    Resource Allocation
+
+                </a>
+
+            </li>
+
+            <li>
+
+                <a href="crop_management.html">
+
+                    Crop Management
+
+                </a>
+
+            </li>
+
+            <li>
+
+                <a
+                    href="#"
+                    id="logoutBtn"
+                >
+
+                    Logout
+
+                </a>
+
+            </li>
+
+        </ul>
+
+    </aside>
+
+    <!-- ======================================
+         Main Content
+    ======================================= -->
+
+    <main class="content">
+
+        <header class="header">
+
+            <div>
+
+                <h1>
+
+                    Dashboard
+
+                </h1>
+
+                <p>
+
+                    Welcome,
+
+                    <span id="userName">
+
+                        User
+
+                    </span>
+
+                </p>
+
+            </div>
+
+            <button
+                class="generate-btn"
+                onclick="window.location='planner.html'"
+            >
+
+                + Generate Plan
+
+            </button>
+
+        </header>
+
+        <!-- ======================================
+             Statistics
+        ======================================= -->
+
+        <section class="stats">
+
+            <div class="card">
+
+                <h3>
+
+                    Farm Plans
+
+                </h3>
+
+                <h2 id="planCount">
+
+                    0
+
+                </h2>
+
+            </div>
+
+            <div class="card">
+
+                <h3>
+
+                    Activities
+
+                </h3>
+
+                <h2 id="activityCount">
+
+                    0
+
+                </h2>
+
+            </div>
+
+        </section>
+
+        <!-- ======================================
+             Quick Actions
+        ======================================= -->
+
+        <section class="quick-actions">
+
+            <a
+                href="planner.html"
+                class="action-card"
+            >
+
+                🌱
+
+                <h3>
+
+                    Generate Plan
+
+                </h3>
+
+                <p>
+
+                    Create a new farm activity plan.
+
+                </p>
+
+            </a>
+
+            <a
+                href="calendar.html"
+                class="action-card"
+            >
+
+                📅
+
+                <h3>
+
+                    Calendar
+
+                </h3>
+
+                <p>
+
+                    View activity schedule.
+
+                </p>
+
+            </a>
+
+            <a
+                href="resources.html"
+                class="action-card"
+            >
+
+                👨‍🌾
+
+                <h3>
+
+                    Resources
+
+                </h3>
+
+                <p>
+
+                    View resource allocation.
+
+                </p>
+
+            </a>
+
+            <a
+                href="crop_management.html"
+                class="action-card"
+            >
+
+                🌾
+
+                <h3>
+
+                    Crop Management
+
+                </h3>
+
+                <p>
+
+                    AI recommendations.
+
+                </p>
+
+            </a>
+
+        </section>
+
+        <!-- ======================================
+             Recent Plans
+        ======================================= -->
+
+        <section class="table-card">
+
+            <h2>
+
+                Recent Farm Plans
+
+            </h2>
+
+            <table>
+
+                <thead>
+
+                    <tr>
+
+                        <th>ID</th>
+
+                        <th>Crop</th>
+
+                        <th>Planting Date</th>
+
+                        <th>Status</th>
+
+                        <th>Actions</th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody id="plansTable">
+
+                </tbody>
+
+            </table>
+
+        </section>
+
+    </main>
+
+</div>
+
+<script src="../js/config.js"></script>
+
+<script src="../js/api.js"></script>
+
+<script src="../js/auth.js"></script>
+
+<script src="../js/dashboard.js"></script>
+
+</body>
+
+</html>

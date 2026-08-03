@@ -13,11 +13,6 @@ Why Enums?
     - Simplify maintenance
     - Enable IDE auto-completion
 
-Author:
-    Deogracia Olweny
-
-Project:
-    Farm Activity Planner AI
 =========================================================
 """
 

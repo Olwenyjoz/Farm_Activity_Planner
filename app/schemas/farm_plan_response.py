@@ -10,11 +10,7 @@ Responsibilities:
     - Serialize farm plan data
     - Support SQLAlchemy ORM model conversion
 
-Author:
-    Deogracia Olweny
 
-Project:
-    Farm Activity Planner AI
 =========================================================
 """
 
@@ -31,9 +27,6 @@ from app.schemas.calendar_event import CalendarEvent
 # =====================================================
 
 class ActivityResponse(BaseModel):
-    """
-    Represents a scheduled farm activity.
-    """
 
     model_config = ConfigDict(from_attributes=True)
 
@@ -53,9 +46,6 @@ class ActivityResponse(BaseModel):
 # =====================================================
 
 class ResourceReportResponse(BaseModel):
-    """
-    Summary of required farm resources.
-    """
 
     model_config = ConfigDict(from_attributes=True)
 
@@ -68,9 +58,6 @@ class ResourceReportResponse(BaseModel):
 # =====================================================
 
 class ConflictResponse(BaseModel):
-    """
-    Represents scheduling conflicts.
-    """
 
     model_config = ConfigDict(from_attributes=True)
 
@@ -86,9 +73,6 @@ class ConflictResponse(BaseModel):
 # =====================================================
 
 class RecommendationResponse(BaseModel):
-    """
-    Planner recommendations.
-    """
 
     model_config = ConfigDict(from_attributes=True)
 
@@ -102,20 +86,43 @@ class RecommendationResponse(BaseModel):
 
 
 # =====================================================
+# WEATHER RESPONSE
+# =====================================================
+
+class WeatherResponse(BaseModel):
+
+    model_config = ConfigDict(from_attributes=True)
+
+    temperature: float
+    humidity: float
+    rain: float
+    wind_speed: float
+    recommendation: str
+
+
+# =====================================================
 # FARM PLAN RESPONSE
 # =====================================================
 
 class FarmPlanResponse(BaseModel):
-    """
-    Complete farm plan returned by the API.
-    """
 
     model_config = ConfigDict(from_attributes=True)
 
     id: int
 
     crop: str
+
     planting_date: date
+
+    farm_size: float
+
+    workers: int
+
+    latitude: float
+
+    longitude: float
+
+    weather: WeatherResponse
 
     activities: list[ActivityResponse]
 
@@ -126,3 +133,5 @@ class FarmPlanResponse(BaseModel):
     recommendations: list[RecommendationResponse]
 
     calendar: list[CalendarEvent]
+
+    status: str

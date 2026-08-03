@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Resource Allocation</title>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet"
+    >
+
+    <link
+        rel="stylesheet"
+        href="../css/style.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="../css/resources.css"
+    >
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <aside class="sidebar">
+
+        <h2>🌱 Farm Planner</h2>
+
+        <ul>
+
+            <li>
+
+                <a href="dashboard.html">
+
+                    Dashboard
+
+                </a>
+
+            </li>
+
+            <li>
+
+                <a href="planner.html">
+
+                    Generate Plan
+
+                </a>
+
+            </li>
+
+            <li>
+
+                <a href="calendar.html">
+
+                    Calendar
+
+                </a>
+
+            </li>
+
+            <li class="active">
+
+                <a href="resources.html">
+
+                    Resource Allocation
+
+                </a>
+
+            </li>
+
+            <li>
+
+                <a href="crop_management.html">
+
+                    Crop Management
+
+                </a>
+
+            </li>
+
+            <li>
+
+                <a
+                    href="#"
+                    id="logoutBtn"
+                >
+
+                    Logout
+
+                </a>
+
+            </li>
+
+        </ul>
+
+    </aside>
+
+    <main class="content">
+
+        <header class="header">
+
+            <h1>
+
+                Resource Allocation Report
+
+            </h1>
+
+            <p>
+
+                View the workforce, equipment requirements, and scheduling conflicts.
+
+            </p>
+
+        </header>
+
+        <div class="summary-grid">
+
+            <div class="summary-card">
+
+                <h3>Total Workers Required</h3>
+
+                <h2 id="workersRequired">
+
+                    --
+
+                </h2>
+
+            </div>
+
+            <div class="summary-card">
+
+                <h3>Equipment Needed</h3>
+
+                <h2 id="equipmentCount">
+
+                    --
+
+                </h2>
+
+            </div>
+
+            <div class="summary-card">
+
+                <h3>Scheduling Conflicts</h3>
+
+                <h2 id="conflictCount">
+
+                    --
+
+                </h2>
+
+            </div>
+
+        </div>
+
+        <section class="resource-card">
+
+            <h2>
+
+                Equipment List
+
+            </h2>
+
+            <ul id="equipmentList">
+
+                <li>
+
+                    No data available.
+
+                </li>
+
+            </ul>
+
+        </section>
+
+        <section class="resource-card">
+
+            <h2>
+
+                Conflict Report
+
+            </h2>
+
+            <table class="resource-table">
+
+                <thead>
+
+                    <tr>
+
+                        <th>Date</th>
+
+                        <th>Workers Needed</th>
+
+                        <th>Workers Available</th>
+
+                        <th>Shortage</th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody id="conflictTable">
+
+                    <tr>
+
+                        <td colspan="4">
+
+                            No conflicts detected.
+
+                        </td>
+
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </section>
+
+    </main>
+
+</div>
+
+<script src="../js/config.js"></script>
+<script src="../js/api.js"></script>
+<script src="../js/auth.js"></script>
+<script src="../js/resources.js"></script>
+
+</body>
+</html>

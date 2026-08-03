@@ -8,11 +8,6 @@ Purpose:
 Responsibilities:
     - Provide a base class for all database models.
 
-Author:
-    Deogracia Olweny
-
-Project:
-    Farm Activity Planner AI
 =========================================================
 """
 

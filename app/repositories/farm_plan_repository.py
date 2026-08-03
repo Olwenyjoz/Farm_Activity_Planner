@@ -14,12 +14,10 @@ Responsibilities:
     - Search
     - Filtering
     - Statistics
+    - User Ownership
+    - Admin Queries
 
-Author:
-    Deogracia Olweny
 
-Project:
-    Farm Activity Planner AI
 =========================================================
 """
 
@@ -38,9 +36,6 @@ class FarmPlanRepository:
     """
 
     def __init__(self, db: Session):
-        """
-        Initialize the repository with a database session.
-        """
         self.db = db
 
     # =====================================================
@@ -50,9 +45,9 @@ class FarmPlanRepository:
     def create(
         self,
         farm_plan: FarmPlanModel
-    ):
+    ) -> FarmPlanModel:
         """
-        Save a new farm plan to the database.
+        Save a new farm plan.
         """
 
         self.db.add(farm_plan)
@@ -62,18 +57,104 @@ class FarmPlanRepository:
         return farm_plan
 
     # =====================================================
-    # READ ALL
+    # SAVE EXISTING OBJECT
+    # =====================================================
+
+    def save(
+        self,
+        farm_plan: FarmPlanModel
+    ) -> FarmPlanModel:
+        """
+        Save changes made to an existing farm plan.
+        """
+
+        self.db.commit()
+        self.db.refresh(farm_plan)
+
+        return farm_plan
+
+    # =====================================================
+    # GET ALL (ADMIN)
     # =====================================================
 
     def get_all(self):
         """
-        Retrieve all farm plans.
+        Retrieve every farm plan.
         """
 
-        return self.db.query(FarmPlanModel).all()
+        return (
+            self.db.query(FarmPlanModel)
+            .order_by(FarmPlanModel.created_at.desc())
+            .all()
+        )
 
     # =====================================================
-    # PAGINATED READ
+    # GET USER PLANS
+    # =====================================================
+
+    def get_all_by_user(
+        self,
+        user_id: int
+    ):
+        """
+        Retrieve all plans belonging to one user.
+        """
+
+        return (
+            self.db.query(FarmPlanModel)
+            .filter(
+                FarmPlanModel.user_id == user_id
+            )
+            .order_by(
+                FarmPlanModel.created_at.desc()
+            )
+            .all()
+        )
+
+    # =====================================================
+    # GET BY ID
+    # =====================================================
+
+    def get_by_id(
+        self,
+        plan_id: int
+    ):
+        """
+        Retrieve one plan by ID.
+        """
+
+        return (
+            self.db.query(FarmPlanModel)
+            .filter(
+                FarmPlanModel.id == plan_id
+            )
+            .first()
+        )
+
+    # =====================================================
+    # GET BY ID AND USER
+    # =====================================================
+
+    def get_by_id_and_user(
+        self,
+        plan_id: int,
+        user_id: int
+    ):
+        """
+        Retrieve one user's farm plan.
+        """
+
+        return (
+            self.db.query(FarmPlanModel)
+            .filter(
+                FarmPlanModel.id == plan_id,
+                FarmPlanModel.user_id == user_id
+            )
+            .first()
+        )
+
+    # =====================================================
+    # PAGINATION
     # =====================================================
 
     def get_paginated(
@@ -82,7 +163,7 @@ class FarmPlanRepository:
         limit: int
     ):
         """
-        Retrieve farm plans using pagination.
+        Retrieve paginated farm plans.
         """
 
         return (
@@ -93,39 +174,7 @@ class FarmPlanRepository:
         )
 
     # =====================================================
-    # COUNT
-    # =====================================================
-
-    def count(self):
-        """
-        Return the total number of farm plans.
-        """
-
-        return (
-            self.db.query(FarmPlanModel)
-            .count()
-        )
-
-    # =====================================================
-    # READ ONE
-    # =====================================================
-
-    def get_by_id(
-        self,
-        plan_id: int
-    ):
-        """
-        Retrieve a farm plan by its ID.
-        """
-
-        return (
-            self.db.query(FarmPlanModel)
-            .filter(FarmPlanModel.id == plan_id)
-            .first()
-        )
-
-    # =====================================================
-    # SEARCH BY CROP
+    # SEARCH
     # =====================================================
 
     def search_by_crop(
@@ -133,19 +182,21 @@ class FarmPlanRepository:
         crop: str
     ):
         """
-        Search farm plans by crop name.
+        Search plans by crop.
         """
 
         return (
             self.db.query(FarmPlanModel)
             .filter(
-                FarmPlanModel.crop.ilike(f"%{crop}%")
+                FarmPlanModel.crop.ilike(
+                    f"%{crop}%"
+                )
             )
             .all()
         )
 
     # =====================================================
-    # FILTER BY PLANTING DATE
+    # FILTER
     # =====================================================
 
     def filter_by_planting_date(
@@ -153,13 +204,14 @@ class FarmPlanRepository:
         planting_date: date
     ):
         """
-        Retrieve farm plans by planting date.
+        Filter plans by planting date.
         """
 
         return (
             self.db.query(FarmPlanModel)
             .filter(
-                FarmPlanModel.planting_date == planting_date
+                FarmPlanModel.planting_date ==
+                planting_date
             )
             .all()
         )
@@ -185,10 +237,7 @@ class FarmPlanRepository:
         for key, value in updated_data.items():
             setattr(plan, key, value)
 
-        self.db.commit()
-        self.db.refresh(plan)
-
-        return plan
+        return self.save(plan)
 
     # =====================================================
     # DELETE
@@ -196,14 +245,48 @@ class FarmPlanRepository:
 
     def delete(
         self,
-        plan: FarmPlanModel
+        farm_plan: FarmPlanModel
     ):
         """
         Delete a farm plan.
         """
 
-        self.db.delete(plan)
+        self.db.delete(farm_plan)
         self.db.commit()
+
+    # =====================================================
+    # COUNT
+    # =====================================================
+
+    def count(self):
+        """
+        Return total farm plans.
+        """
+
+        return (
+            self.db.query(FarmPlanModel)
+            .count()
+        )
+
+    # =====================================================
+    # USER COUNT
+    # =====================================================
+
+    def count_by_user(
+        self,
+        user_id: int
+    ):
+        """
+        Count one user's plans.
+        """
+
+        return (
+            self.db.query(FarmPlanModel)
+            .filter(
+                FarmPlanModel.user_id == user_id
+            )
+            .count()
+        )
 
     # =====================================================
     # STATISTICS
@@ -211,17 +294,19 @@ class FarmPlanRepository:
 
     def get_statistics(self):
         """
-        Retrieve summary statistics.
+        Return farm statistics.
         """
 
         total_plans = self.count()
 
-        crop_counts = (
+        crop_distribution = (
             self.db.query(
                 FarmPlanModel.crop,
                 func.count(FarmPlanModel.id)
             )
-            .group_by(FarmPlanModel.crop)
+            .group_by(
+                FarmPlanModel.crop
+            )
             .all()
         )
 
@@ -229,6 +314,7 @@ class FarmPlanRepository:
             "total_plans": total_plans,
             "crop_distribution": {
                 crop: count
-                for crop, count in crop_counts
+                for crop, count
+                in crop_distribution
             }
         }

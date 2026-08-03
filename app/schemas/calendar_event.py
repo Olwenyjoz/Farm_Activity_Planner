@@ -10,11 +10,7 @@ Responsibilities:
     - Standardize API responses
     - Improve documentation
 
-Author:
-    Deogracia Olweny
 
-Project:
-    Farm Activity Planner AI
 =========================================================
 """
 

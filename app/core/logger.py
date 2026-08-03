@@ -11,11 +11,6 @@ Responsibilities:
     - Define log level
     - Provide reusable logger instances
 
-Author:
-    Deogracia Olweny
-
-Project:
-    Farm Activity Planner AI
 =========================================================
 """
 

@@ -14,8 +14,8 @@ Project:
 """
 
 from datetime import date
-
 from app.planner.weather.service import get_weather_forecast
+from app.services.weather_service import WeatherService
 
 
 def test_weather_forecast():
@@ -29,3 +29,13 @@ def test_weather_forecast():
     assert forecast.rainfall_mm == 15
 
     assert forecast.temperature == 22
+    
+
+service = WeatherService()
+
+weather = service.get_weather(
+    latitude=-1.286389,
+    longitude=36.817223
+)
+
+print(weather)

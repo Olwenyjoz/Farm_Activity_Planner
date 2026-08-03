@@ -1,0 +1,124 @@
+body{
+
+    background:#f4f7f2;
+
+}
+
+.register-container{
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    min-height:100vh;
+
+    padding:40px;
+
+}
+
+.register-card{
+
+    background:white;
+
+    width:550px;
+
+    padding:20px;
+
+    border-radius:15px;
+
+    box-shadow:0 5px 15px rgba(0,0,0,.1);
+
+}
+
+.register-card h1{
+
+    text-align:center;
+
+    color:#2e7d32;
+
+    font-size: 28px;
+
+}
+
+.register-card p{
+
+    text-align:center;
+
+    margin-bottom:25px;
+
+}
+
+.input-group{
+
+    margin-bottom:18px;
+
+}
+
+.input-group label{
+
+    display:block;
+
+    margin-bottom:6px;
+
+    font-weight:500;
+
+}
+
+.input-group input,
+.input-group select{
+
+    width:100%;
+
+    padding:12px;
+
+    border:1px solid #ccc;
+
+    border-radius:8px;
+
+    box-sizing:border-box;
+
+}
+
+.register-btn{
+
+    width:100%;
+
+    padding:14px;
+
+    border:none;
+
+    border-radius:8px;
+
+    background:#2e7d32;
+
+    color:white;
+
+    cursor:pointer;
+
+    font-size:16px;
+
+}
+
+.register-btn:hover{
+
+    background:#1b5e20;
+
+}
+
+.links{
+
+    text-align:center;
+
+    margin-top:20px;
+
+}
+
+.links a{
+
+    text-decoration:none;
+
+    color:#2e7d32;
+
+}

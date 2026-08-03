@@ -5,11 +5,6 @@ Module: farm_plan_update.py
 Purpose:
     Request schema for updating a farm plan.
 
-Author:
-    Deogracia Olweny
-
-Project:
-    Farm Activity Planner AI
 =========================================================
 """
 
@@ -27,3 +22,6 @@ class FarmPlanUpdate(BaseModel):
     planting_date: date
     farm_size: float
     workers: int
+    
+    latitude: float
+    longitude: float

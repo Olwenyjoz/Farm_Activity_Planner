@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Farm Calendar</title>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet"
+    >
+
+    <link
+        rel="stylesheet"
+        href="../css/style.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="../css/calendar.css"
+    >
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- Sidebar -->
+
+    <aside class="sidebar">
+
+        <h2>🌱 Farm Planner</h2>
+
+        <ul>
+
+            <li>
+
+                <a href="dashboard.html">
+
+                    Dashboard
+
+                </a>
+
+            </li>
+
+            <li>
+
+                <a href="planner.html">
+
+                    Generate Plan
+
+                </a>
+
+            </li>
+
+            <li class="active">
+
+                <a href="calendar.html">
+
+                    Calendar
+
+                </a>
+
+            </li>
+
+            <li>
+
+                <a href="resources.html">
+
+                    Resource Allocation
+
+                </a>
+
+            </li>
+
+            <li>
+
+                <a href="crop_management.html">
+
+                    Crop Management
+
+                </a>
+
+            </li>
+
+            <li>
+
+                <a
+                    href="#"
+                    id="logoutBtn"
+                >
+
+                    Logout
+
+                </a>
+
+            </li>
+
+        </ul>
+
+    </aside>
+
+    <!-- Main Content -->
+
+    <main class="content">
+
+        <header class="header">
+
+            <h1>
+
+                Farm Activity Calendar
+
+            </h1>
+
+            <p>
+
+                Calendar generated from the latest farm activity plan.
+
+            </p>
+
+        </header>
+
+        <section class="calendar-card">
+
+            <table class="calendar-table">
+
+                <thead>
+
+                    <tr>
+
+                        <th>Date</th>
+
+                        <th>Activity</th>
+
+                        <th>Priority</th>
+
+                        <th>Status</th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody id="calendarBody">
+
+                    <tr>
+
+                        <td colspan="4">
+
+                            No calendar generated yet.
+
+                        </td>
+
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </section>
+
+    </main>
+
+</div>
+
+<script src="../js/config.js"></script>
+
+<script src="../js/api.js"></script>
+
+<script src="../js/auth.js"></script>
+
+<script src="../js/calendar.js"></script>
+
+</body>
+
+</html>

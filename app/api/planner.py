@@ -16,6 +16,7 @@ Project:
 from datetime import date
 from typing import List
 
+
 from fastapi import (
     APIRouter,
     Depends,
@@ -33,33 +34,36 @@ from app.schemas.farm_plan_create import FarmPlanCreate
 from app.schemas.farm_plan_update import FarmPlanUpdate
 from app.schemas.farm_plan_response import FarmPlanResponse
 
+from app.api.dependencies import get_current_user
+from app.models.user import User
+
 router = APIRouter()
 
 
 # =====================================================
 # GENERATE FARM PLAN
 # =====================================================
-
 @router.post(
     "/generate-plan",
     response_model=FarmPlanResponse,
     status_code=status.HTTP_201_CREATED
-)
+    )
 def generate_plan(
     request: FarmPlanCreate,
+    current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
-):
+    ):
     """
-    Generate a farm plan,
-    save it to the database,
-    and return the saved farm plan.
+    Generate a farm plan for the authenticated user.
     """
 
     repository = FarmPlanRepository(db)
     service = FarmPlanService(repository)
 
-    return service.generate_plan(request)
-
+    return service.generate_plan(
+        request=request,
+        current_user=current_user
+    )
 
 # =====================================================
 # GET ALL FARM PLANS
@@ -71,16 +75,17 @@ def generate_plan(
     status_code=status.HTTP_200_OK
 )
 def get_all_farm_plans(
+    current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
     """
-    Retrieve all farm plans.
+    Retrieve all farm plans belonging to the authenticated user.
     """
 
     repository = FarmPlanRepository(db)
     service = FarmPlanService(repository)
 
-    return service.get_all_plans()
+    return service.get_all_plans(current_user.id)
 
 
 # =====================================================
@@ -189,16 +194,20 @@ def get_statistics(
 )
 def get_farm_plan_by_id(
     plan_id: int,
+    current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
     """
-    Retrieve a farm plan by its ID.
+    Retrieve one of the authenticated user's farm plans.
     """
 
     repository = FarmPlanRepository(db)
     service = FarmPlanService(repository)
 
-    plan = service.get_plan_by_id(plan_id)
+    plan = service.get_user_plan(
+        plan_id,
+        current_user.id
+    )
 
     if plan is None:
         raise HTTPException(
@@ -215,33 +224,30 @@ def get_farm_plan_by_id(
 
 @router.put(
     "/farm-plans/{plan_id}",
-    response_model=FarmPlanResponse,
-    status_code=status.HTTP_200_OK
+    response_model=FarmPlanResponse
 )
 def update_farm_plan(
     plan_id: int,
     request: FarmPlanUpdate,
+    current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
-):
-    """
-    Update an existing farm plan.
-    """
+    ):
+        repository = FarmPlanRepository(db)
+        service = FarmPlanService(repository)
 
-    repository = FarmPlanRepository(db)
-    service = FarmPlanService(repository)
-
-    updated_plan = service.update_plan(
-        plan_id,
-        request
-    )
-
-    if updated_plan is None:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="Farm plan not found."
+        plan = service.update_user_plan(
+            plan_id,
+            current_user.id,
+            request
         )
 
-    return updated_plan
+        if plan is None:
+            raise HTTPException(
+                status_code=404,
+                detail="Farm plan not found."
+            )
+
+        return plan
 
 
 # =====================================================
@@ -254,23 +260,21 @@ def update_farm_plan(
 )
 def delete_farm_plan(
     plan_id: int,
+    current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
-    """
-    Delete a farm plan by its ID.
-    """
-
     repository = FarmPlanRepository(db)
     service = FarmPlanService(repository)
 
-    plan = service.get_plan_by_id(plan_id)
+    deleted = service.delete_user_plan(
+        plan_id,
+        current_user.id
+    )
 
-    if plan is None:
+    if not deleted:
         raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
+            status_code=404,
             detail="Farm plan not found."
         )
 
-    service.delete_plan(plan)
-
-    return
+    return None

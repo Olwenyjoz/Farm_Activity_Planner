@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Farm Activity Planner</title>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet"
+    >
+
+    <link
+        rel="stylesheet"
+        href="../css/style.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="../css/planner.css"
+    >
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <aside class="sidebar">
+
+        <h2>🌱 Farm Planner</h2>
+
+        <ul>
+
+            <li>
+
+                <a href="dashboard.html">
+
+                    Dashboard
+
+                </a>
+
+            </li>
+
+            <li class="active">
+
+                <a href="planner.html">
+
+                    Generate Plan
+
+                </a>
+
+            </li>
+
+            <li>
+
+                <a href="calendar.html">
+
+                    Calendar
+
+                </a>
+
+            </li>
+
+            <li>
+
+                <a href="resources.html">
+
+                    Resource Allocation
+
+                </a>
+
+            </li>
+
+            <li>
+
+                <a href="crop_management.html">
+
+                    Crop Management
+
+                </a>
+
+            </li>
+
+            <li>
+
+                <a
+                    href="#"
+                    id="logoutBtn"
+                >
+
+                    Logout
+
+                </a>
+
+            </li>
+
+        </ul>
+
+    </aside>
+
+    <main class="content">
+
+        <header class="header">
+
+            <div>
+
+                <h1 id="pageTitle">
+
+                    Generate Farm Activity Plan
+
+                </h1>
+
+                <p id="pageDescription">
+
+                    Enter the farm information below to generate an optimal activity schedule.
+
+                </p>
+
+            </div>
+
+        </header>
+
+        <section class="planner-card">
+
+            <form id="plannerForm">
+
+                <div class="form-grid">
+
+                    <div class="form-group">
+
+                        <label for="crop">Crop</label>
+
+                        <input
+                            type="text"
+                            id="crop"
+                            placeholder="e.g. Maize"
+                            required
+                        >
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label for="plantingDate">Planting Date</label>
+
+                        <input
+                            type="date"
+                            id="plantingDate"
+                            required
+                        >
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label for="farmSize">Farm Size (Acres)</label>
+
+                        <input
+                            type="number"
+                            id="farmSize"
+                            min="1"
+                            required
+                        >
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label for="workers">Available Workers</label>
+
+                        <input
+                            type="number"
+                            id="workers"
+                            min="1"
+                            required
+                        >
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label for="soilType">Soil Type</label>
+
+                        <select id="soilType">
+
+                            <option value="Loamy">Loamy</option>
+
+                            <option value="Clay">Clay</option>
+
+                            <option value="Sandy">Sandy</option>
+
+                        </select>
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label for="season">Season</label>
+
+                        <select id="season">
+
+                            <option value="Rainy">Rainy</option>
+
+                            <option value="Dry">Dry</option>
+
+                        </select>
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label for="latitude">Latitude</label>
+
+                        <input
+                            type="number"
+                            step="any"
+                            id="latitude"
+                            readonly
+                            required
+                        >
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label for="longitude">Longitude</label>
+
+                        <input
+                            type="number"
+                            step="any"
+                            id="longitude"
+                            readonly
+                            required
+                        >
+
+                    </div>
+
+                </div>
+
+                <button
+                    type="submit"
+                    class="generate-btn"
+                    id="submitButton"
+                >
+
+                    Generate Farm Plan
+
+                </button>
+
+            </form>
+
+        </section>
+
+        <section
+            class="result-card"
+            id="resultCard"
+        >
+
+            <h2>
+
+                Generated Farm Plan
+
+            </h2>
+
+            <div
+                id="loadingBox"
+                class="loading-box hidden"
+            >
+
+                <div class="loader"></div>
+
+                <h3>
+
+                    AI is generating your farm plan...
+
+                </h3>
+
+                <p>
+
+                    Optimizing activities...
+
+                </p>
+
+            </div>
+
+            <div id="planResult">
+
+                <p>
+
+                    Generate a farm plan to view the schedule.
+
+                </p>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+<script src="../js/config.js"></script>
+<script src="../js/api.js"></script>
+<script src="../js/auth.js"></script>
+<script src="../js/planner.js"></script>
+
+</body>
+
+</html>

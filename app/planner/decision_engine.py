@@ -13,8 +13,7 @@ Responsibilities:
     - Analyze priority activities
     - Produce structured recommendations
 
-Author:
-    Deogracia Olweny
+
 =========================================================
 """
 

@@ -11,11 +11,6 @@ Responsibilities:
     - Sort events chronologically
     - Provide reusable calendar data
 
-Author:
-    Deogracia Olweny
-
-Project:
-    Farm Activity Planner AI
 =========================================================
 """
 

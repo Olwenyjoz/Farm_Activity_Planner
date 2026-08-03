@@ -10,11 +10,7 @@ Responsibilities:
     - Reduce weather-related risks
     - Produce an optimized schedule
 
-Author:
-    Deogracia Olweny
 
-Project:
-    Farm Activity Planner AI
 =========================================================
 """
 

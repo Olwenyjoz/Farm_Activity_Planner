@@ -6,11 +6,7 @@ Purpose:
     Creates database sessions for FastAPI dependency
     injection.
 
-Author:
-    Deogracia Olweny
 
-Project:
-    Farm Activity Planner AI
 =========================================================
 """
 

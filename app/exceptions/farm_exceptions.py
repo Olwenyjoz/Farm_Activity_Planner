@@ -11,11 +11,6 @@ Responsibilities:
     - Improve readability
     - Centralize exception handling
 
-Author:
-    Deogracia Olweny
-
-Project:
-    Farm Activity Planner AI
 =========================================================
 """
 

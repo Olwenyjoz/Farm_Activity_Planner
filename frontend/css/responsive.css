@@ -1,0 +1,27 @@
+@media(max-width:768px){
+
+.hero h1{
+
+    font-size:36px;
+
+}
+
+.hero p{
+
+    font-size:17px;
+
+}
+
+.buttons{
+
+    flex-direction:column;
+
+}
+
+.features{
+
+    padding:40px 20px;
+
+}
+
+}

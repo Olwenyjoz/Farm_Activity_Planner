@@ -12,11 +12,6 @@ Why Constants?
     - Simplify maintenance
     - Improve readability
 
-Author:
-    Deogracia Olweny
-
-Project:
-    Farm Activity Planner AI
 =========================================================
 """
 

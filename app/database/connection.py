@@ -7,21 +7,18 @@ Purpose:
 
 Responsibilities:
     - Create the SQLAlchemy engine.
-    - Configure SQLite.
+    - Configure the database connection.
 
-Author:
-    Deogracia Olweny
 
-Project:
-    Farm Activity Planner AI
 =========================================================
 """
 
 from sqlalchemy import create_engine
 
-DATABASE_URL = "sqlite:///farm_planner.db"
+from app.core.config import settings
 
 engine = create_engine(
-    DATABASE_URL,
-    echo=True
+    settings.DATABASE_URL,
+    echo=True,
+    connect_args={"check_same_thread": False}
 )

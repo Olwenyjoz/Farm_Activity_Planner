@@ -10,11 +10,7 @@ Responsibilities:
     - Encapsulate farm planning data
     - Provide a strongly typed internal model
 
-Author:
-    Deogracia Olweny
 
-Project:
-    Farm Activity Planner AI
 =========================================================
 """
 

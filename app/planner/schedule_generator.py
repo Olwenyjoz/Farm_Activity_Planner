@@ -16,11 +16,7 @@ Responsibilities:
     - Generate calendar events
     - Return the complete farm plan
 
-Author:
-    Deogracia Olweny
 
-Project:
-    Farm Activity Planner AI
 =========================================================
 """
 

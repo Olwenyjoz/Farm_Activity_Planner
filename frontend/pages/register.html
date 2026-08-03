@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+
+        Register
+
+    </title>
+
+    <link
+        rel="stylesheet"
+        href="../css/style.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="../css/register.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="../css/responsive.css"
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet"
+    >
+
+</head>
+
+<body>
+
+<div class="register-container">
+
+    <div class="register-card">
+
+        <h1>
+
+            🌱 Farm Activity Planner AI
+
+        </h1>
+
+        <p>
+
+            Create your account
+
+        </p>
+
+        <form id="registerForm">
+
+            <div class="input-group">
+
+                <label>
+
+                    First Name
+
+                </label>
+
+                <input
+                    type="text"
+                    id="firstName"
+                    required
+                >
+
+            </div>
+
+            <div class="input-group">
+
+                <label>
+
+                    Last Name
+
+                </label>
+
+                <input
+                    type="text"
+                    id="lastName"
+                    required
+                >
+
+            </div>
+
+            <div class="input-group">
+
+                <label>
+
+                    Email
+
+                </label>
+
+                <input
+                    type="email"
+                    id="email"
+                    required
+                >
+
+            </div>
+
+            <div class="input-group">
+
+                <label>
+
+                    Phone
+
+                </label>
+
+                <input
+                    type="text"
+                    id="phone"
+                    required
+                >
+
+            </div>
+
+            <div class="input-group">
+
+                <label>
+
+                    Password
+
+                </label>
+
+                <input
+                    type="password"
+                    id="password"
+                    required
+                >
+
+            </div>
+
+            <div class="input-group">
+
+                <label>
+
+                    Confirm Password
+
+                </label>
+
+                <input
+                    type="password"
+                    id="confirmPassword"
+                    required
+                >
+
+            </div>
+
+            <div class="input-group">
+
+                <label>
+
+                    Role
+
+                </label>
+
+                <select id="role">
+
+                    <option value="FARMER">
+
+                        Farmer
+
+                    </option>
+
+                    <option value="AGRONOMIST">
+
+                        Agronomist
+
+                    </option>
+
+                    <option value="ADMIN">
+
+                        Administrator
+
+                    </option>
+
+                </select>
+
+            </div>
+
+            <button
+                type="submit"
+                class="register-btn"
+            >
+
+                Register
+
+            </button>
+
+        </form>
+
+        <div class="links">
+
+            <p>
+
+                Already have an account?
+
+            </p>
+
+            <a href="login.html">
+
+                Login Here
+
+            </a>
+
+            <br><br>
+
+            <a href="../index.html">
+
+                ← Back Home
+
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script src="../js/config.js"></script>
+<script src="../js/api.js"></script>
+<script src="../js/auth.js"></script>
+<script src="../js/register.js"></script>
+
+</body>
+
+</html>
